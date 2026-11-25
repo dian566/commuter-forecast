@@ -9,10 +9,15 @@ TARGET = pathlib.Path("/output/entry.txt")
 LIMIT = 140
 
 
-def main() -> None:
-    text = FORECAST
+def validate(text: str) -> str:
+    """Return the forecast once it passes the bounty limits."""
     assert text and "\n" not in text and "\r" not in text
     assert len(text) <= LIMIT, "forecast exceeds the 140-character limit"
+    return text
+
+
+def main() -> None:
+    text = validate(FORECAST)
     TARGET.parent.mkdir(parents=True, exist_ok=True)
     TARGET.write_text(text, encoding="utf-8")
 
