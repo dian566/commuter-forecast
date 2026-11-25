@@ -1,23 +1,21 @@
 #!/usr/bin/env python3
-"""Entry for make.fun: Charm the Commuter: Forecast a City That Isn't."""
+# SPDX-License-Identifier: MIT
+"""Forecast a city that isn't, for the make.fun commuter bounty."""
 
-from os import makedirs
+import pathlib
 
-ENTRY = (
-    "In Drizzleford, rain until nine, then sunshine and a bus that actually comes. Bring an umbrella and low expectations."
-)
-
-
-def write_entry() -> None:
-    """Write the entry to /output/entry.txt, nothing else."""
-    if len(ENTRY) > 140 or not ENTRY.strip():
-        raise ValueError("entry must be a non-empty line of at most 140 characters")
-    if "\n" in ENTRY or "\r" in ENTRY:
-        raise ValueError("entry must be a single line")
-    makedirs("/output", exist_ok=True)
-    with open("/output/entry.txt", "w", encoding="utf-8", newline="") as handle:
-        handle.write(ENTRY)
+FORECAST = "In Drizzleford, rain until nine, then sunshine and a bus that actually comes. Bring an umbrella and low expectations."
+TARGET = pathlib.Path("/output/entry.txt")
+LIMIT = 140
 
 
-if __name__ == "__main__":  # run as a script
-    write_entry()
+def main() -> None:
+    text = FORECAST
+    assert text and "\n" not in text and "\r" not in text
+    assert len(text) <= LIMIT, "forecast exceeds the 140-character limit"
+    TARGET.parent.mkdir(parents=True, exist_ok=True)
+    TARGET.write_text(text, encoding="utf-8")
+
+
+if __name__ == "__main__":
+    main()
